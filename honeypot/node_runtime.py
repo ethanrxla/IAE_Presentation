@@ -186,7 +186,7 @@ def _cmd_last(parts, state):
     history = (
         f"pi       pts/0        10.1.10.55       Tue Apr 21 03:12 - 03:18  (00:05)\n"
         f"root     pts/0        10.1.10.1        Mon Apr 20 03:15 - 03:22  (00:07)\n"
-        f"reboot   system boot  5.15.84-v7l+     Sun Apr 19 11:52"
+        f"reboot   system boot  6.12.34+rpt-rpi-2712     Sun Apr 19 11:52"
     )
     return True, login_line + "\n" + history + "\n\nwtmp begins Sun Apr 19 11:52:58 2026"
 
@@ -684,7 +684,7 @@ def _cmd_df(parts, state):
             "/dev/mmcblk0p2   30G  4.6G   23G  17% /\n"
             "tmpfs           1.9G     0  1.9G   0% /dev/shm\n"
             "tmpfs           5.0M     0  5.0M   0% /run/lock\n"
-            "/dev/mmcblk0p1  253M   48M  205M  19% /boot\n"
+            "/dev/mmcblk0p1  253M   48M  205M  19% /boot/firmware\n"
             "tmpfs           380M     0  380M   0% /run/user/0"
         )
     return True, (
@@ -693,7 +693,7 @@ def _cmd_df(parts, state):
         "tmpfs             388496    1832    386664   1% /run\n"
         "/dev/mmcblk0p2  30703044 4823456  24234456  17% /\n"
         "tmpfs            1942480       0   1942480   0% /dev/shm\n"
-        "/dev/mmcblk0p1    258095   49024    209071  19% /boot"
+        "/dev/mmcblk0p1    258095   49024    209071  19% /boot/firmware"
     )
 
 
@@ -709,7 +709,7 @@ def _cmd_mount(parts, state):
         "devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)\n"
         "tmpfs on /run type tmpfs (rw,nosuid,nodev,noexec,relatime,size=388496k,mode=755)\n"
         "/dev/mmcblk0p2 on / type ext4 (rw,noatime)\n"
-        "/dev/mmcblk0p1 on /boot type vfat (rw,relatime)"
+        "/dev/mmcblk0p1 on /boot/firmware type vfat (rw,relatime)"
     )
 
 
@@ -717,7 +717,7 @@ def _cmd_lsblk(parts, state):
     return True, (
         "NAME         MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT\n"
         "mmcblk0      179:0    0  29.7G  0 disk\n"
-        "├─mmcblk0p1  179:1    0   256M  0 part /boot\n"
+        "├─mmcblk0p1  179:1    0   256M  0 part /boot/firmware\n"
         "└─mmcblk0p2  179:2    0  29.5G  0 part /"
     )
 
@@ -821,15 +821,14 @@ def _cmd_journalctl(parts, state):
 def _cmd_dmesg(parts, state):
     # Real dmesg on a Pi shows boot messages. Return a plausible subset.
     return True, (
-        "[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd083]\n"
-        "[    0.000000] Linux version 5.15.84-v7l+ (dom@buildhost) (arm-linux-gnueabihf-gcc-8)\n"
-        "[    0.000000] CPU: ARMv7 Processor [410fd083] revision 3 (ARMv7), cr=10c5383d\n"
-        "[    0.000000] OF: fdt: Machine model: Raspberry Pi 4 Model B Rev 1.4\n"
+        "[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x414fd0b1]\n"
+        "[    0.000000] Linux version 6.12.34+rpt-rpi-2712 (dom@buildhost) (aarch64-linux-gnu-gcc-14)\n"
+        "[    0.000000] Machine model: Raspberry Pi 5 Model B Rev 1.0\n"
         "[    0.000000] Memory policy: Data cache writealloc\n"
-        "[    0.000000] cma: Reserved 64 MiB at 0xd7c00000\n"
+        "[    0.000000] OF: reserved mem: 0x0000000038000000..0x000000003fffffff (131072 KiB) map reusable linux,cma\n"
         "[    1.234521] systemd[1]: System time before build time, advancing clock.\n"
-        "[    2.456789] systemd[1]: systemd 247.3-7+deb11u4 running in system mode.\n"
-        "[    3.123456] systemd[1]: Detected architecture arm."
+        "[    2.456789] systemd[1]: systemd 257.2-3 running in system mode.\n"
+        "[    3.123456] systemd[1]: Detected architecture arm64."
     )
 
 
@@ -841,15 +840,15 @@ def _cmd_dpkg(parts, state):
             "|/ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)\n"
             "||/ Name                 Version                 Architecture Description\n"
             "+++-====================-=======================-============-===============================\n"
-            "ii  apache2              2.4.51-1+deb11u1        armhf        Apache HTTP Server\n"
-            "ii  bash                 5.1-2+deb11u1           armhf        GNU Bourne Again SHell\n"
-            "ii  coreutils            8.32-4+b1               armhf        GNU core utilities\n"
-            "ii  curl                 7.74.0-1.3+deb11u7      armhf        command line tool for URLs\n"
-            "ii  mariadb-server       1:10.5.19-0+deb11u1     armhf        MariaDB database server\n"
-            "ii  openssh-server       1:8.4p1-5+deb11u3       armhf        secure shell (SSH) server\n"
-            "ii  openssl              1.1.1w-0+deb11u1        armhf        Secure Sockets Layer toolkit\n"
-            "ii  python3              3.9.2-3                 armhf        interactive high-level OO language\n"
-            "ii  wget                 1.21-1+deb11u1          armhf        retrieves files from the web"
+            "ii  apache2              2.4.64-1        arm64        Apache HTTP Server\n"
+            "ii  bash                 5.2.37-1           arm64        GNU Bourne Again SHell\n"
+            "ii  coreutils            9.5-1               arm64        GNU core utilities\n"
+            "ii  curl                 8.14.1-1      arm64        command line tool for URLs\n"
+            "ii  mariadb-server       1:11.8.2-1     arm64        MariaDB database server\n"
+            "ii  openssh-server       1:10.0p1-5       arm64        secure shell (SSH) server\n"
+            "ii  openssl              3.5.1-1        arm64        Secure Sockets Layer toolkit\n"
+            "ii  python3              3.13.5-1                 arm64        interactive high-level OO language\n"
+            "ii  wget                 1.25.0-1          arm64        retrieves files from the web"
         )
     if len(parts) >= 2 and parts[1] in ("-s", "--status"):
         return True, ""

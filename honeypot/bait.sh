@@ -36,7 +36,7 @@ else
 fi
 
 NEW_HOSTNAME="pi-sensor-gateway"
-SSH_BANNER="SSH-2.0-OpenSSH_8.4p1 Debian-5+deb11u1"
+SSH_BANNER="SSH-2.0-OpenSSH_10.0p1 Debian-5"
 
 echo "[*] Starting Cowrie Deception Setup v4..."
 
@@ -99,11 +99,11 @@ cat << 'EOF' > "$COWRIE_DIR/honeyfs/etc/hosts"
 EOF
 
 cat << 'EOF' > "$COWRIE_DIR/honeyfs/etc/os-release"
-PRETTY_NAME="Debian GNU/Linux 11 (bullseye)"
+PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
 NAME="Debian GNU/Linux"
-VERSION_ID="11"
-VERSION="11 (bullseye)"
-VERSION_CODENAME=bullseye
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
 ID=debian
 HOME_URL="https://www.debian.org/"
 SUPPORT_URL="https://www.debian.org/support"
@@ -140,33 +140,49 @@ echo "[+] Writing /proc entries..."
 
 cat << 'EOF' > "$COWRIE_DIR/honeyfs/proc/cpuinfo"
 processor	: 0
-model name	: ARMv7 Processor rev 3 (v7l)
 BogoMIPS	: 108.00
-Features	: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm crc32
+Features	: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint
 CPU implementer	: 0x41
-CPU architecture: 7
-CPU variant	: 0x0
-CPU part	: 0xd08
-CPU revision	: 3
+CPU architecture: 8
+CPU variant	: 0x4
+CPU part	: 0xd0b
+CPU revision	: 1
 
 processor	: 1
-model name	: ARMv7 Processor rev 3 (v7l)
 BogoMIPS	: 108.00
-Features	: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm crc32
+Features	: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint
 CPU implementer	: 0x41
-CPU architecture: 7
-CPU variant	: 0x0
-CPU part	: 0xd08
-CPU revision	: 3
+CPU architecture: 8
+CPU variant	: 0x4
+CPU part	: 0xd0b
+CPU revision	: 1
 
-Hardware	: BCM2711
-Revision	: c03114
+processor	: 2
+BogoMIPS	: 108.00
+Features	: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint
+CPU implementer	: 0x41
+CPU architecture: 8
+CPU variant	: 0x4
+CPU part	: 0xd0b
+CPU revision	: 1
+
+processor	: 3
+BogoMIPS	: 108.00
+Features	: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint
+CPU implementer	: 0x41
+CPU architecture: 8
+CPU variant	: 0x4
+CPU part	: 0xd0b
+CPU revision	: 1
+
+Hardware	: BCM2712
+Revision	: d04170
 Serial		: 10000000b1234567
-Model		: Raspberry Pi 4 Model B Rev 1.4
+Model		: Raspberry Pi 5 Model B Rev 1.0
 EOF
 
 cat << 'EOF' > "$COWRIE_DIR/honeyfs/proc/version"
-Linux version 5.15.84-v7l+ (dom@buildhost) (arm-linux-gnueabihf-gcc-8 (Ubuntu/Linaro 8.4.0-3ubuntu1) 8.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #1613 SMP Thu Jan 5 12:01:26 GMT 2023
+Linux version 6.12.34+rpt-rpi-2712 (dom@buildhost) (aarch64-linux-gnu-gcc-14 (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44) #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1 (2025-06-15)
 EOF
 
 cat << 'EOF' > "$COWRIE_DIR/honeyfs/proc/meminfo"

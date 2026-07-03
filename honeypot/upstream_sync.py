@@ -11,23 +11,19 @@ It should be the LAST resort, invoked only when:
   - Tier 1/2/3 genuinely cannot produce a convincing response, AND
   - The command is one where the red team would expect real complexity
 
-Latency: 3-10s typical. This is naturally detectable, so the router only
+Latency: ~1.5s typical. This is naturally detectable, so the router only
 sends commands here where attackers would tolerate slow responses anyway
 (find / -name ..., apt-get update, pip install ..., large file reads).
 
-!! CONFIGURATION !!
-Fill in BEDROCK_ENDPOINT, MODEL_ID, and credentials BEFORE the gauntlet.
-See bedrock_setup.md for step-by-step AWS configuration.
+CLIENT: direct AWS Bedrock call via boto3 (Claude Haiku 4.5). boto3 resolves
+credentials from the environment (AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY,
+sourced into the Cowrie service env) or an instance role. boto3 is imported
+lazily so this module loads even where boto3 isn't installed (e.g. CI).
 """
 
 import json
 import time
-import urllib.request
-import urllib.error
-import hashlib
-import hmac
 import os
-from datetime import datetime, timezone
 from typing import Tuple
 
 from node_context import SessionState
@@ -40,19 +36,18 @@ from node_context import SessionState
 # Bedrock region — whatever AWS tells you to use
 AWS_REGION = os.environ.get("AWS_REGION", "us-east-1")
 
-# Bedrock model ID — Claude Haiku is fast + cheap, good for this use case.
+# Bedrock model ID — Claude Haiku 4.5 is fast + cheap, good for this use case.
 # Other options:
-#   anthropic.claude-3-haiku-20240307-v1:0      (recommended — fast, cheap)
-#   anthropic.claude-3-5-sonnet-20241022-v2:0   (higher quality, slower)
-#   amazon.titan-text-express-v1                (Amazon's own, very cheap)
-MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
+#   us.anthropic.claude-haiku-4-5-20251001-v1:0   (recommended — fast, cheap)
+#   us.anthropic.claude-sonnet-4-5-20250929-v1:0  (higher quality, slower)
+MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "us.anthropic.claude-haiku-4-5-20251001-v1:0")
 
-# Credentials — prefer environment variables, never hard-code
+# Credentials — resolved by boto3 from the environment / instance role.
+# Presence of these env vars is how the router decides Tier 4 is "configured".
 AWS_ACCESS_KEY_ID     = os.environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
-AWS_SESSION_TOKEN     = os.environ.get("AWS_SESSION_TOKEN", "")
 
-# Hard timeout — cloud calls must complete within this or router gives up
+# Hard timeout — cloud calls must complete within this or the router gives up
 BEDROCK_TIMEOUT = 8.0
 
 # Max tokens per response — shell commands don't need long essays
@@ -60,53 +55,24 @@ MAX_TOKENS = 512
 
 
 # ==============================================================================
-# AWS SigV4 signing (vanilla stdlib — no boto3 dependency on Pi)
+# Lazy boto3 client (kept out of import time so CI without boto3 still loads)
 # ==============================================================================
 
-def _sigv4_sign_request(method, host, path, payload, access_key, secret_key, session_token, region, service="bedrock"):
-    """
-    Sign an HTTPS request for AWS SigV4. Returns headers dict.
-    Using stdlib only (no boto3) to keep Pi install minimal.
-    """
-    now = datetime.now(timezone.utc)
-    amz_date = now.strftime("%Y%m%dT%H%M%SZ")
-    date_stamp = now.strftime("%Y%m%d")
+_client = None
 
-    canonical_uri = path
-    canonical_querystring = ""
-    payload_hash = hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
-    canonical_headers = f"host:{host}\nx-amz-date:{amz_date}\n"
-    signed_headers = "host;x-amz-date"
-    if session_token:
-        canonical_headers += f"x-amz-security-token:{session_token}\n"
-        signed_headers += ";x-amz-security-token"
-
-    canonical_request = f"{method}\n{canonical_uri}\n{canonical_querystring}\n{canonical_headers}\n{signed_headers}\n{payload_hash}"
-
-    algorithm = "AWS4-HMAC-SHA256"
-    credential_scope = f"{date_stamp}/{region}/{service}/aws4_request"
-    string_to_sign = f"{algorithm}\n{amz_date}\n{credential_scope}\n{hashlib.sha256(canonical_request.encode()).hexdigest()}"
-
-    def sign(key, msg):
-        return hmac.new(key, msg.encode("utf-8"), hashlib.sha256).digest()
-
-    k_date = sign(("AWS4" + secret_key).encode("utf-8"), date_stamp)
-    k_region = sign(k_date, region)
-    k_service = sign(k_region, service)
-    k_signing = sign(k_service, "aws4_request")
-    signature = hmac.new(k_signing, string_to_sign.encode("utf-8"), hashlib.sha256).hexdigest()
-
-    auth_header = f"{algorithm} Credential={access_key}/{credential_scope}, SignedHeaders={signed_headers}, Signature={signature}"
-
-    headers = {
-        "Content-Type": "application/json",
-        "X-Amz-Date": amz_date,
-        "Authorization": auth_header,
-    }
-    if session_token:
-        headers["X-Amz-Security-Token"] = session_token
-    return headers
+def _get_client():
+    """Create (once) and return a boto3 bedrock-runtime client."""
+    global _client
+    if _client is None:
+        import boto3
+        from botocore.config import Config
+        _client = boto3.client(
+            "bedrock-runtime",
+            region_name=AWS_REGION,
+            config=Config(read_timeout=BEDROCK_TIMEOUT, retries={"max_attempts": 1}),
+        )
+    return _client
 
 
 # ==============================================================================
@@ -115,7 +81,7 @@ def _sigv4_sign_request(method, host, path, payload, access_key, secret_key, ses
 
 def build_bedrock_prompt(command: str, state: SessionState) -> dict:
     """Build the Bedrock Messages API payload (Claude format)."""
-    system_context = f"""You are simulating a real Debian 11 shell on a Raspberry Pi 4 (pi-sensor-gateway, 10.1.10.20).
+    system_context = f"""You are simulating a real Debian 13 (trixie) shell on a Raspberry Pi 5 (pi-sensor-gateway, 10.1.10.20, aarch64).
 You are logged in as root from {state.attacker_ip}. Current directory: {state.current_dir}.
 System has been up {state.uptime_seconds() // 86400} days.
 Services running: apache2, mariadb, sshd, cron, sensor collector.
@@ -150,64 +116,46 @@ If command not found, return: bash: <cmd>: command not found"""
 
 def handle(command: str, state: SessionState) -> Tuple[bool, str, float]:
     """
-    Escalate to AWS Bedrock. Returns (success, response, latency_seconds).
-    success=False means the cloud call failed — router handles with fallback.
+    Escalate to AWS Bedrock (Claude Haiku 4.5 via boto3).
+    Returns (success, response, latency_seconds). success=False means the cloud
+    call failed — the router handles that with its own fallback.
 
     This function NEVER touches local Ollama. That's Tier 3's job.
     """
     # Fail loud if not configured — better than silent fallback
-    if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY:
+    if not is_configured():
         return False, "", 0.0
 
-    host = f"bedrock-runtime.{AWS_REGION}.amazonaws.com"
-    path = f"/model/{MODEL_ID}/invoke"
-    url  = f"https://{host}{path}"
+    try:
+        client = _get_client()
+    except Exception as e:
+        return False, f"[bedrock error: boto3 unavailable: {e}]", 0.0
 
-    payload_dict = build_bedrock_prompt(command, state)
-    payload = json.dumps(payload_dict)
-
-    headers = _sigv4_sign_request(
-        method="POST",
-        host=host,
-        path=path,
-        payload=payload,
-        access_key=AWS_ACCESS_KEY_ID,
-        secret_key=AWS_SECRET_ACCESS_KEY,
-        session_token=AWS_SESSION_TOKEN,
-        region=AWS_REGION,
-    )
-
-    req = urllib.request.Request(
-        url,
-        data=payload.encode("utf-8"),
-        headers=headers,
-        method="POST",
-    )
+    payload = json.dumps(build_bedrock_prompt(command, state))
 
     start = time.time()
     try:
-        with urllib.request.urlopen(req, timeout=BEDROCK_TIMEOUT) as resp:
-            body = json.loads(resp.read().decode("utf-8"))
-            latency = time.time() - start
+        resp = client.invoke_model(
+            modelId=MODEL_ID,
+            body=payload,
+            contentType="application/json",
+            accept="application/json",
+        )
+        body = json.loads(resp["body"].read())
+        latency = time.time() - start
 
-            # Claude on Bedrock returns content as list of blocks
-            content = body.get("content", [])
-            text_parts = [b.get("text", "") for b in content if b.get("type") == "text"]
-            response_text = "\n".join(text_parts).strip()
-            return True, response_text, latency
-    except urllib.error.HTTPError as e:
-        # Most common: auth error (bad creds) or throttling
-        try:
-            err_body = e.read().decode("utf-8", errors="replace")[:200]
-        except Exception:
-            err_body = str(e)
-        return False, f"[bedrock error: {e.code} {err_body}]", time.time() - start
+        # Claude on Bedrock returns content as a list of blocks
+        content = body.get("content", [])
+        text_parts = [b.get("text", "") for b in content if b.get("type") == "text"]
+        response_text = "\n".join(text_parts).strip()
+        return True, response_text, latency
     except Exception as e:
+        # Most common: auth error (bad/absent creds), throttling, or timeout
         return False, f"[bedrock error: {e}]", time.time() - start
 
 
 def is_configured() -> bool:
-    """Check if Tier 4 is ready to use."""
+    """Check if Tier 4 is ready to use (credentials present in the env)."""
     return bool(AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY)
 
 
@@ -215,7 +163,6 @@ def health_check() -> Tuple[bool, str]:
     """Quick sanity check — try a tiny call and see if it works."""
     if not is_configured():
         return False, "Credentials not set (AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY)"
-    from node_context import SessionState
     state = SessionState()
     success, resp, latency = handle("echo ok", state)
     if success:

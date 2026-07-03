@@ -46,76 +46,90 @@ STATIC_TABLE = {
     # --- Kernel / architecture ---
     "uname":                    "Linux",
     "uname -s":                 "Linux",
-    "uname -r":                 "5.15.84-v7l+",
-    "uname -v":                 "#1613 SMP Thu Jan 5 12:01:26 GMT 2023",
-    "uname -m":                 "armv7l",
+    "uname -r":                 "6.12.34+rpt-rpi-2712",
+    "uname -v":                 "#1 SMP PREEMPT Debian 1:6.12.34-1+rpt1 (2025-06-15)",
+    "uname -m":                 "aarch64",
     "uname -p":                 "unknown",
     "uname -i":                 "unknown",
     "uname -o":                 "GNU/Linux",
     "uname -n":                 "pi-sensor-gateway",
-    "uname -a":                 "Linux pi-sensor-gateway 5.15.84-v7l+ #1613 SMP Thu Jan 5 12:01:26 GMT 2023 armv7l GNU/Linux",
-    "arch":                     "armv7l",
+    "uname -a":                 "Linux pi-sensor-gateway 6.12.34+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.34-1+rpt1 (2025-06-15) aarch64 GNU/Linux",
+    "arch":                     "aarch64",
 
     # --- OS release (these files never change on a running system) ---
     "cat /etc/os-release": (
-        'PRETTY_NAME="Debian GNU/Linux 11 (bullseye)"\n'
+        'PRETTY_NAME="Debian GNU/Linux 13 (trixie)"\n'
         'NAME="Debian GNU/Linux"\n'
-        'VERSION_ID="11"\n'
-        'VERSION="11 (bullseye)"\n'
-        'VERSION_CODENAME=bullseye\n'
+        'VERSION_ID="13"\n'
+        'VERSION="13 (trixie)"\n'
+        'VERSION_CODENAME=trixie\n'
         'ID=debian\n'
         'HOME_URL="https://www.debian.org/"\n'
         'SUPPORT_URL="https://www.debian.org/support"\n'
         'BUG_REPORT_URL="https://bugs.debian.org/"'
     ),
-    "cat /etc/debian_version":  "11.6",
-    "cat /etc/issue":           "Debian GNU/Linux 11 \\n \\l\n",
-    "cat /etc/issue.net":       "Debian GNU/Linux 11",
+    "cat /etc/debian_version":  "13.1",
+    "cat /etc/issue":           "Debian GNU/Linux 13 \\n \\l\n",
+    "cat /etc/issue.net":       "Debian GNU/Linux 13",
     "lsb_release -a": (
         "No LSB modules are available.\n"
         "Distributor ID: Debian\n"
-        "Description:    Debian GNU/Linux 11 (bullseye)\n"
-        "Release:        11\n"
-        "Codename:       bullseye"
+        "Description:    Debian GNU/Linux 13 (trixie)\n"
+        "Release:        13\n"
+        "Codename:       trixie"
     ),
-    "lsb_release -d":           "Description:    Debian GNU/Linux 11 (bullseye)",
-    "lsb_release -r":           "Release:        11",
-    "lsb_release -c":           "Codename:       bullseye",
+    "lsb_release -d":           "Description:    Debian GNU/Linux 13 (trixie)",
+    "lsb_release -r":           "Release:        13",
+    "lsb_release -c":           "Codename:       trixie",
     "lsb_release -i":           "Distributor ID: Debian",
 
     # --- Hardware (Pi identity is constant) ---
     "cat /proc/cpuinfo": (
         "processor\t: 0\n"
-        "model name\t: ARMv7 Processor rev 3 (v7l)\n"
         "BogoMIPS\t: 108.00\n"
-        "Features\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm crc32\n"
+        "Features\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint\n"
         "CPU implementer\t: 0x41\n"
-        "CPU architecture: 7\n"
-        "CPU variant\t: 0x0\n"
-        "CPU part\t: 0xd08\n"
-        "CPU revision\t: 3\n\n"
+        "CPU architecture: 8\n"
+        "CPU variant\t: 0x4\n"
+        "CPU part\t: 0xd0b\n"
+        "CPU revision\t: 1\n\n"
         "processor\t: 1\n"
-        "model name\t: ARMv7 Processor rev 3 (v7l)\n"
         "BogoMIPS\t: 108.00\n"
-        "Features\t: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm crc32\n"
+        "Features\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint\n"
         "CPU implementer\t: 0x41\n"
-        "CPU architecture: 7\n"
-        "CPU variant\t: 0x0\n"
-        "CPU part\t: 0xd08\n"
-        "CPU revision\t: 3\n\n"
-        "Hardware\t: BCM2711\n"
-        "Revision\t: c03114\n"
+        "CPU architecture: 8\n"
+        "CPU variant\t: 0x4\n"
+        "CPU part\t: 0xd0b\n"
+        "CPU revision\t: 1\n\n"
+        "processor\t: 2\n"
+        "BogoMIPS\t: 108.00\n"
+        "Features\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint\n"
+        "CPU implementer\t: 0x41\n"
+        "CPU architecture: 8\n"
+        "CPU variant\t: 0x4\n"
+        "CPU part\t: 0xd0b\n"
+        "CPU revision\t: 1\n\n"
+        "processor\t: 3\n"
+        "BogoMIPS\t: 108.00\n"
+        "Features\t: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 asimdfhm dit uscat ilrcpc flagm ssbs sb paca pacg dcpodp flagm2 frint\n"
+        "CPU implementer\t: 0x41\n"
+        "CPU architecture: 8\n"
+        "CPU variant\t: 0x4\n"
+        "CPU part\t: 0xd0b\n"
+        "CPU revision\t: 1\n\n"
+        "Hardware\t: BCM2712\n"
+        "Revision\t: d04170\n"
         "Serial\t\t: 10000000b1234567\n"
-        "Model\t\t: Raspberry Pi 4 Model B Rev 1.4"
+        "Model\t\t: Raspberry Pi 5 Model B Rev 1.0"
     ),
     "cat /proc/version": (
-        "Linux version 5.15.84-v7l+ (dom@buildhost) "
-        "(arm-linux-gnueabihf-gcc-8 (Ubuntu/Linaro 8.4.0-3ubuntu1) 8.4.0, "
-        "GNU ld (GNU Binutils for Ubuntu) 2.34) "
-        "#1613 SMP Thu Jan 5 12:01:26 GMT 2023"
+        "Linux version 6.12.34+rpt-rpi-2712 (dom@buildhost) "
+        "(aarch64-linux-gnu-gcc-14 (Debian 14.2.0-19) 14.2.0, "
+        "GNU ld (GNU Binutils for Debian) 2.44) "
+        "#1 SMP PREEMPT Debian 1:6.12.34-1+rpt1 (2025-06-15)"
     ),
-    "cat /sys/firmware/devicetree/base/model": "Raspberry Pi 4 Model B Rev 1.4\x00",
-    "cat /proc/device-tree/model":             "Raspberry Pi 4 Model B Rev 1.4\x00",
+    "cat /sys/firmware/devicetree/base/model": "Raspberry Pi 5 Model B Rev 1.0\x00",
+    "cat /proc/device-tree/model":             "Raspberry Pi 5 Model B Rev 1.0\x00",
 
     # --- Network config (IPs, MACs don't change mid-session) ---
     "cat /etc/hostname":        "pi-sensor-gateway",
@@ -257,33 +271,33 @@ STATIC_TABLE = {
     "command -v docker":        "",
 
     # --- Version strings (programs ship with fixed versions) ---
-    "python3 --version":        "Python 3.9.2",
-    "python --version":         "Python 3.9.2",
+    "python3 --version":        "Python 3.13.5",
+    "python --version":         "Python 3.13.5",
     "bash --version": (
-        "GNU bash, version 5.1.4(1)-release (arm-unknown-linux-gnueabihf)\n"
+        "GNU bash, version 5.2.37(1)-release (aarch64-unknown-linux-gnu)\n"
         "Copyright (C) 2020 Free Software Foundation, Inc.\n"
         "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\n\n"
         "This is free software; you are free to change and redistribute it.\n"
         "There is NO WARRANTY, to the extent permitted by law."
     ),
     "perl --version": (
-        "\nThis is perl 5, version 32, subversion 1 (v5.32.1) built for arm-linux-gnueabihf-thread-multi\n\n"
+        "\nThis is perl 5, version 40, subversion 1 (v5.40.1) built for aarch64-linux-gnu-thread-multi\n\n"
         "Copyright 1987-2021, Larry Wall\n\n"
         "Perl may be copied only under the terms of either the Artistic License or the\n"
         "GNU General Public License, which may be found in the Perl 5 source kit."
     ),
-    "curl --version":           "curl 7.74.0 (arm-unknown-linux-gnueabihf) libcurl/7.74.0 GnuTLS/3.7.1 zlib/1.2.11",
-    "wget --version":           "GNU Wget 1.21 built on linux-gnueabihf.",
+    "curl --version":           "curl 8.14.1 (aarch64-unknown-linux-gnu) libcurl/8.14.1 OpenSSL/3.5.1 zlib/1.3.1",
+    "wget --version":           "GNU Wget 1.25.0 built on linux-gnueabihf.",
     "gcc --version": (
-        "gcc (Debian 10.2.1-6) 10.2.1 20210110\n"
+        "gcc (Debian 14.2.0-19) 14.2.0\n"
         "Copyright (C) 2020 Free Software Foundation, Inc.\n"
         "This is free software; see the source for copying conditions.  There is NO\n"
         "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
     ),
-    "ssh -V":                   "OpenSSH_8.4p1 Debian-5+deb11u1, OpenSSL 1.1.1w  11 Sep 2023",
-    "openssl version":          "OpenSSL 1.1.1w  11 Sep 2023",
-    "php --version":            "PHP 7.4.33 (cli) (built: Dec  7 2022 22:43:05) ( NTS )",
-    "mysql --version":          "mysql  Ver 15.1 Distrib 10.5.19-MariaDB, for debian-linux-gnueabihf (armhf) using readline 5.2",
+    "ssh -V":                   "OpenSSH_10.0p1 Debian-5, OpenSSL 3.5.1 1 Jul 2025",
+    "openssl version":          "OpenSSL 3.5.1 1 Jul 2025",
+    "php --version":            "PHP 8.4.8 (cli) (built: Jun 13 2025 10:20:14) ( NTS )",
+    "mysql --version":          "mysql  Ver 15.1 Distrib 11.8.2-MariaDB, for debian-linux-gnu (arm64) using readline 5.2",
 
     # --- Shell builtin help/env (fixed for our shell) ---
     "echo $SHELL":              "/bin/bash",
@@ -301,7 +315,7 @@ STATIC_TABLE = {
 # ------------------------------------------------------------------------------
 # Folded in from the earlier tier-based lineage (was `tier1_static.py`) and
 # re-written to THIS node's identity: pi-sensor-gateway / 10.1.10.20 (eth0,
-# b8:27:eb:12:34:56) / Debian 11 bullseye / Raspberry Pi 4 / armv7l.
+# b8:27:eb:12:34:56) / Debian 13 trixie / Raspberry Pi 5 / aarch64.
 #
 # Only TRULY STATIC entries live here. Anything time- or connection-dependent
 # (date, uptime, w/who/last, free, df, ifconfig, ip, arp, netstat, ss, env,
@@ -328,19 +342,19 @@ _EXPANDED = {
     "echo $PWD":                "/root",
 
     # --- Version strings for tools not covered above ---
-    "python3 -V":               "Python 3.9.2",
-    "git --version":            "git version 2.30.2",
+    "python3 -V":               "Python 3.13.5",
+    "git --version":            "git version 2.47.2",
     "apache2 -v": (
-        "Server version: Apache/2.4.62 (Debian)\n"
+        "Server version: Apache/2.4.64 (Debian)\n"
         "Server built:   2024-09-02T10:42:00"
     ),
-    "rsync --version":          "rsync  version 3.2.3  protocol version 31",
-    "vi --version":             "VIM - Vi IMproved 8.2 (2019 Dec 12, compiled Sep 25 2021 08:19:05)",
-    "vim --version":            "VIM - Vi IMproved 8.2 (2019 Dec 12, compiled Sep 25 2021 08:19:05)",
-    "nano --version":           "GNU nano, version 5.4",
-    "dpkg --version":           "Debian 'dpkg' package management program version 1.20.13 (armhf).",
+    "rsync --version":          "rsync  version 3.4.1  protocol version 32",
+    "vi --version":             "VIM - Vi IMproved 9.1 (2024 Jan 02, compiled May 20 2025 12:00:00)",
+    "vim --version":            "VIM - Vi IMproved 9.1 (2024 Jan 02, compiled May 20 2025 12:00:00)",
+    "nano --version":           "GNU nano, version 8.3",
+    "dpkg --version":           "Debian 'dpkg' package management program version 1.22.11 (arm64).",
     "apt --help": (
-        "apt 2.2.4 (armhf)\n"
+        "apt 2.9.28 (arm64)\n"
         "Usage: apt [options] command\n\n"
         "apt is a commandline package manager and provides commands for\n"
         "searching and managing as well as querying information about packages."
@@ -360,7 +374,7 @@ _EXPANDED = {
         "#\n"
         "# <file system> <mount point>   <type>  <options>       <dump>  <pass>\n"
         "proc            /proc           proc    defaults          0       0\n"
-        "PARTUUID=738a4d67-01  /boot           vfat    defaults          0       2\n"
+        "PARTUUID=738a4d67-01  /boot/firmware           vfat    defaults          0       2\n"
         "PARTUUID=738a4d67-02  /               ext4    defaults,noatime  0       1\n"
         "# a swapfile is not a swap partition, no line here\n"
         "#   use  dphys-swapfile swap[on|off]  for that"
@@ -433,11 +447,11 @@ _EXPANDED = {
         "USERGROUPS_ENAB yes\n"
         "ENCRYPT_METHOD YESCRYPT"
     ),
-    # Bullseye APT sources (normalized from the newer-release lineage).
+    # Trixie APT sources (normalized from the newer-release lineage).
     "cat /etc/apt/sources.list": (
-        "deb http://deb.debian.org/debian bullseye main contrib non-free\n"
-        "deb http://security.debian.org/debian-security bullseye-security main contrib non-free\n"
-        "deb http://deb.debian.org/debian bullseye-updates main contrib non-free"
+        "deb http://deb.debian.org/debian trixie main contrib non-free\n"
+        "deb http://security.debian.org/debian-security trixie-security main contrib non-free\n"
+        "deb http://deb.debian.org/debian trixie-updates main contrib non-free"
     ),
     "cat /etc/network/interfaces": (
         "# interfaces(5) file used by ifup(8) and ifdown(8)\n"
@@ -486,7 +500,7 @@ _EXPANDED = {
     ),
 
     # ==========================================================================
-    # Static /proc + /boot files (invariant identity/config)
+    # Static /proc + /boot/firmware files (invariant identity/config)
     # ==========================================================================
     # Memory totals match Tier 2 `free` (3884968 kB total, 102396 kB swap).
     "cat /proc/meminfo": (
@@ -556,7 +570,7 @@ _EXPANDED = {
         "devpts /dev/pts devpts rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666 0 0\n"
         "tmpfs /dev/shm tmpfs rw,nosuid,nodev 0 0\n"
         "tmpfs /run/lock tmpfs rw,nosuid,nodev,noexec,relatime,size=5120k 0 0\n"
-        "/dev/mmcblk0p1 /boot vfat rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,errors=remount-ro 0 0\n"
+        "/dev/mmcblk0p1 /boot/firmware vfat rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,errors=remount-ro 0 0\n"
         "tmpfs /run/user/0 tmpfs rw,nosuid,nodev,relatime,size=388492k,mode=700 0 0"
     ),
     "cat /proc/net/arp": (
@@ -571,12 +585,12 @@ _EXPANDED = {
     ),
     "cat /proc/1/cmdline":      "/sbin/init",
     "cat /proc/1/comm":         "systemd",
-    "cat /boot/cmdline.txt": (
+    "cat /boot/firmware/cmdline.txt": (
         "console=serial0,115200 console=tty1 root=PARTUUID=738a4d67-02 "
         "rootfstype=ext4 fsck.repair=yes rootwait quiet splash "
         "plymouth.ignore-serial-consoles"
     ),
-    "cat /boot/config.txt": (
+    "cat /boot/firmware/config.txt": (
         "# For more options and information see\n"
         "# http://rptl.io/configtxt\n"
         "# Some settings may impact device functionality. See link above for details\n\n"
@@ -737,7 +751,7 @@ _EXPANDED = {
     ),
 
     # ==========================================================================
-    # Dotfiles — root and pi (standard Debian bullseye skeletons)
+    # Dotfiles — root and pi (standard Debian trixie skeletons)
     # ==========================================================================
     "cat /root/.bashrc": (
         "# ~/.bashrc: executed by bash(1) for non-login shells.\n\n"
@@ -816,6 +830,121 @@ _EXPANDED = {
 }
 
 STATIC_TABLE.update(_EXPANDED)
+
+
+# ==============================================================================
+# EXPANDED CORPUS II — additional invariant identity/config commands (trixie/Pi5)
+# Same rule as above: only truly-static outputs, and no command head that Tier 2
+# renders dynamically. All values agree with the Pi 5 / Debian 13 persona.
+# ==============================================================================
+
+_EXPANDED_2 = {
+
+    # --- CPU / core count (invariant) ---
+    "nproc":                        "4",
+    "getconf _NPROCESSORS_ONLN":    "4",
+    "getconf _NPROCESSORS_CONF":    "4",
+    "getconf LONG_BIT":             "64",
+    "getconf PAGESIZE":             "4096",
+    "getconf PAGE_SIZE":            "4096",
+    "lscpu": (
+        "Architecture:                         aarch64\n"
+        "  CPU op-mode(s):                     32-bit, 64-bit\n"
+        "  Byte Order:                         Little Endian\n"
+        "CPU(s):                               4\n"
+        "  On-line CPU(s) list:                0-3\n"
+        "Vendor ID:                            ARM\n"
+        "  Model name:                         Cortex-A76\n"
+        "    Model:                            1\n"
+        "    Thread(s) per core:               1\n"
+        "    Core(s) per cluster:              4\n"
+        "    Socket(s):                        -\n"
+        "    Cluster(s):                       1\n"
+        "    Stepping:                         r4p1\n"
+        "    CPU(s) scaling MHz:               62%\n"
+        "    CPU max MHz:                      2400.0000\n"
+        "    CPU min MHz:                      1500.0000\n"
+        "    BogoMIPS:                         108.00\n"
+        "Caches (sum of all):                  \n"
+        "  L1d:                                256 KiB (4 instances)\n"
+        "  L1i:                                256 KiB (4 instances)\n"
+        "  L2:                                 2 MiB (4 instances)\n"
+        "  L3:                                 2 MiB (1 instance)\n"
+        "Vulnerabilities:                      \n"
+        "  Gather data sampling:               Not affected\n"
+        "  Spectre v1:                         Mitigation; __user pointer sanitization"
+    ),
+
+    # --- hostnamectl (static; boot id fixed for our emulation) ---
+    "hostnamectl": (
+        " Static hostname: pi-sensor-gateway\n"
+        "       Icon name: computer\n"
+        "      Machine ID: b9d1c4e27f8a4d3ea1c60f9b2d7e4a51\n"
+        "         Boot ID: 4f2c9a1e6b3d4c8fa7e5d091b62f3a4c\n"
+        "Operating System: Debian GNU/Linux 13 (trixie)\n"
+        "          Kernel: Linux 6.12.34+rpt-rpi-2712\n"
+        "    Architecture: arm64"
+    ),
+    "systemctl --version": (
+        "systemd 257 (257.2-3)\n"
+        "+PAM +AUDIT +SELINUX -APPARMOR +IMA +SMACK +SECCOMP +GCRYPT +GNUTLS "
+        "+OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD "
+        "+LIBCRYPTSETUP +LIBFDISK +PCRE2 +PWQUALITY +P11KIT +QRENCODE +TPM2 "
+        "+BZIP2 +LZ4 +XZ +ZLIB +ZSTD default-hierarchy=unified"
+    ),
+
+    # --- Pi-specific firmware tool ---
+    "vcgencmd measure_temp":        "temp=47.8'C",
+    "vcgencmd get_throttled":       "throttled=0x0",
+    "vcgencmd measure_clock arm":   "frequency(0)=1500000000",
+
+    # --- /proc kernel identity (invariant) ---
+    "cat /proc/sys/kernel/hostname":   "pi-sensor-gateway",
+    "cat /proc/sys/kernel/ostype":     "Linux",
+    "cat /proc/sys/kernel/osrelease":  "6.12.34+rpt-rpi-2712",
+    "cat /proc/sys/kernel/version":    "#1 SMP PREEMPT Debian 1:6.12.34-1+rpt1 (2025-06-15)",
+    "cat /proc/cmdline": (
+        "console=serial0,115200 console=tty1 root=PARTUUID=738a4d67-02 "
+        "rootfstype=ext4 fsck.repair=yes rootwait quiet splash "
+        "plymouth.ignore-serial-consoles"
+    ),
+    "cat /proc/stat": (
+        "cpu  48293 128 24102 3847261 1834 0 892 0 0 0\n"
+        "cpu0 12394 34 6123 961892 472 0 234 0 0 0\n"
+        "cpu1 11982 31 5984 962103 441 0 218 0 0 0\n"
+        "cpu2 12028 32 6012 961723 468 0 226 0 0 0\n"
+        "cpu3 11889 31 5983 961543 453 0 214 0 0 0\n"
+        "ctxt 8234729\n"
+        "btime 1745367240\n"
+        "processes 38291\n"
+        "procs_running 1\n"
+        "procs_blocked 0"
+    ),
+
+    # --- Static /etc config files ---
+    "cat /etc/host.conf":       "multi on",
+    "cat /etc/hosts.allow": (
+        "# /etc/hosts.allow: list of hosts that are allowed to access the system.\n"
+        "#                   See the manual pages hosts_access(5) and hosts_options(5)."
+    ),
+    "cat /etc/hosts.deny": (
+        "# /etc/hosts.deny: list of hosts that are _not_ allowed to access the system.\n"
+        "#                  See the manual pages hosts_access(5) and hosts_options(5)."
+    ),
+    "cat /etc/environment":     "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"",
+    "cat /etc/mailname":        "pi-sensor-gateway",
+    "cat /etc/ld.so.conf":      "include /etc/ld.so.conf.d/*.conf",
+    "cat /etc/modules": (
+        "# /etc/modules: kernel modules to load at boot time.\n"
+        "#\n"
+        "# This file contains the names of kernel modules that should be loaded\n"
+        "# at boot time, one per line. Lines beginning with \"#\" are ignored.\n"
+        "i2c-dev"
+    ),
+    "cat /etc/default/locale":  "LANG=en_GB.UTF-8",
+}
+
+STATIC_TABLE.update(_EXPANDED_2)
 
 
 # Commands that produce an error on a real system. Tier 1 returns these exactly.

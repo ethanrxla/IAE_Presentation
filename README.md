@@ -58,14 +58,14 @@ chain — if the primary level fails, exactly one backup is tried, then a safe s
 
 | Level | What it handles | Backing |
 |-------|-----------------|---------|
-| `LOCAL_CACHE` | Invariant outputs (`uname`, `/etc/os-release`, config-file reads, version strings, …) | static table (~160 entries) |
+| `LOCAL_CACHE` | Invariant outputs (`uname`, `/etc/os-release`, config-file reads, version strings, …) | static table (~185 entries) |
 | `LOCAL_RUNTIME` | Stateful commands derived from session state (`uptime`, `cd`/`pwd`, `ps`, created files) | generator |
-| `EDGE_INFER` | Unpredictable but cheap-to-fake commands | local LLM (Ollama) |
-| `CLOUD_SYNC` | Complex/rare recon needing the strongest model | cloud LLM (AWS Bedrock) |
+| `EDGE_INFER` | Unpredictable but cheap-to-fake commands | local LLM (Ollama `qwen2.5:1.5b`) |
+| `CLOUD_SYNC` | Complex/rare recon needing the strongest model | cloud LLM (AWS Bedrock, Claude Haiku 4.5 via boto3) |
 | `FALLBACK` | Anything that errors — never crash the shell | inline stub |
 
-The honeypot presents as a Raspberry Pi "sensor gateway" (`pi-sensor-gateway`, Debian 11
-bullseye, armv7l). Its stateful layer keeps that identity consistent under probing: `uptime`
+The honeypot presents as a Raspberry Pi "sensor gateway" (`pi-sensor-gateway`, Debian 13
+trixie, aarch64). Its stateful layer keeps that identity consistent under probing: `uptime`
 advances on wall-clock, `cd /tmp; pwd` persists, `touch x; ls` shows the new file, and process
 lists include the attacker's own shell.
 
@@ -87,7 +87,7 @@ honeypot/
 ├── node_runtime.py        # LOCAL_RUNTIME — stateful command generator
 ├── node_context.py        # per-session state (login time, cwd, fake procs, file table)
 ├── edge_inference.py      # EDGE_INFER — local Ollama client + system prompt
-├── upstream_sync.py       # CLOUD_SYNC — AWS Bedrock client (direct-from-Pi)
+├── upstream_sync.py       # CLOUD_SYNC — AWS Bedrock client (boto3, Claude Haiku 4.5)
 ├── shell_broker.py        # Cowrie integration hook
 ├── shell_layer.py         # shell parsing / command handling
 ├── cloud-apigw/           # alternative cloud tier: Lambda + API Gateway (self-contained)

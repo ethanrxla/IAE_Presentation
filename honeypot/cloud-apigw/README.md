@@ -2,12 +2,12 @@
 
 A **self-contained, alternative** cloud-response path for the honeypot, vendored from an
 earlier lineage of the project and re-written to this node's identity
-(`pi-sensor-gateway` / Debian 11 bullseye / Raspberry Pi 4 / armv7l).
+(`pi-sensor-gateway` / Debian 13 trixie / Raspberry Pi 5 / aarch64).
 
 ## How this differs from the main tree
 
-The main honeypot (`../upstream_sync.py`) talks to **AWS Bedrock directly** from the Pi: the
-Pi holds AWS credentials and signs SigV4 requests itself. Simple, but the Pi carries the keys.
+The main honeypot (`../upstream_sync.py`) talks to **AWS Bedrock directly** from the Pi via
+boto3 (Claude Haiku 4.5): the Pi holds AWS credentials itself. Simple, but the Pi carries the keys.
 
 This module instead puts the model call **behind AWS Lambda + API Gateway**:
 
