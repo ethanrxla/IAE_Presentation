@@ -32,4 +32,5 @@ BEADROCK.md
 **/SECURITY_AUDIT.md
 **/AUDIT_NOTES.md
 *.pdf
+!presentation/Project-SCALPEL.pdf
 *.HEIC

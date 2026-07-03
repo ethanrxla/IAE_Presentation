@@ -9,9 +9,29 @@ chosen to maximize believability and minimize cost.
 
 This repo holds both the honeypot code and the project presentation.
 
-- **[`index.html`](index.html)** — the project presentation (open in a browser).
+- **[`presentation/`](presentation/)** — the official deck ([PDF](presentation/Project-SCALPEL.pdf) · [PPTX](presentation/Project-SCALPEL.pptx)); slides shown below.
 - **[`honeypot/`](honeypot/)** — the honeypot agent, deployment scripts, docs, playbook, and the
   red-team test harness.
+
+## Presentation
+
+The official 5-slide deck — [PDF](presentation/Project-SCALPEL.pdf) · [PPTX](presentation/Project-SCALPEL.pptx):
+
+**Request flow**
+
+![Request flow](presentation/slides/01-request-flow.png)
+
+**Architecture overview**
+
+![Architecture overview](presentation/slides/02-architecture-overview.png)
+
+**Pickle filesystem realism**
+
+![Pickle filesystem realism](presentation/slides/03-pickle-filesystem-realism.png)
+
+**Why SCALPEL matters for government & critical infrastructure**
+
+![Why SCALPEL matters](presentation/slides/04-why-scalpel-matters.png)
 
 ---
 
