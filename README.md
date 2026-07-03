@@ -38,7 +38,7 @@ chain — if the primary level fails, exactly one backup is tried, then a safe s
 
 | Level | What it handles | Backing |
 |-------|-----------------|---------|
-| `LOCAL_CACHE` | Invariant outputs (`uname`, `/etc/os-release`, …) | static table |
+| `LOCAL_CACHE` | Invariant outputs (`uname`, `/etc/os-release`, config-file reads, version strings, …) | static table (~160 entries) |
 | `LOCAL_RUNTIME` | Stateful commands derived from session state (`uptime`, `cd`/`pwd`, `ps`, created files) | generator |
 | `EDGE_INFER` | Unpredictable but cheap-to-fake commands | local LLM (Ollama) |
 | `CLOUD_SYNC` | Complex/rare recon needing the strongest model | cloud LLM (AWS Bedrock) |
@@ -67,9 +67,10 @@ honeypot/
 ├── node_runtime.py        # LOCAL_RUNTIME — stateful command generator
 ├── node_context.py        # per-session state (login time, cwd, fake procs, file table)
 ├── edge_inference.py      # EDGE_INFER — local Ollama client + system prompt
-├── upstream_sync.py       # CLOUD_SYNC — AWS Bedrock client
+├── upstream_sync.py       # CLOUD_SYNC — AWS Bedrock client (direct-from-Pi)
 ├── shell_broker.py        # Cowrie integration hook
 ├── shell_layer.py         # shell parsing / command handling
+├── cloud-apigw/           # alternative cloud tier: Lambda + API Gateway (self-contained)
 ├── bait.sh                # populates the honeyfs with realistic decoy files
 ├── install_ollama.sh      # installs Ollama, pulls + warms the model
 ├── health_check.sh        # pre-run verification
