@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# OS
+.DS_Store
+
+# runtime metrics / logs
+*.log
+cowrie.log
+sensor_health.json
+
+# local env / captures
+.env
+.env.local
+/tmp/groundtruth*
+groundtruth/
+groundtruth.tgz
+
+# excluded internal / sensitive material (safety net — do not commit)
+meetings.txt
+message.txt
+notetesting.txt
+sessioncontext.md
+workingplan.md
+BEADROCK.md
+**/OPSEC.md
+**/SECURITY_AUDIT.md
+**/AUDIT_NOTES.md
+*.pdf
+*.HEIC
